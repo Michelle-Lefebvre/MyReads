@@ -1,13 +1,27 @@
 import './App.css';
-import { useState } from 'react';
-import Shelves from './components/Shelves';
+import { useState, useEffect } from 'react';
+import BookShelves from './components/BookShelves';
+import * as BooksAPI from './BooksAPI';
+import BookList from './components/BookList';
 
 function App() {
   const [showSearchPage, setShowSearchpage] = useState(false);
 
+  const [books, setBooks] = useState([]);
+
+  useEffect(() => {
+    const getBooks = async () => {
+      const res = await BooksAPI.getAll();
+      setBooks(res);
+    };
+
+    getBooks();
+  }, []);
+
   return (
     <div className='app'>
-      <Shelves />
+      <BookShelves />
+      <BookList books={books} />
 
       {showSearchPage ? (
         <div className='search-books'>
